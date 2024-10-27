@@ -68,12 +68,16 @@ assign LED = ~ioctl_download & ~ioctl_upload & UART_RX;
 `include "build_id.v"
 localparam CONF_STR = {
 	"TSConf;;",
-	"O78,Joystick 1,Kempston,Sinclair 1,Sinclair 2,Cursor;",
-	"O9A,Joystick 2,Kempston,Sinclair 1,Sinclair 2,Cursor;",
-	"O3,Swap mouse buttons,OFF,ON;",
-	"O12,Scandoubler Fx,None,CRT 25%,CRT 50%,CRT 75%;",
-	"O4,Vsync,49 Hz,60 Hz;",
-	"O5,VDAC1,ON,OFF;",
+	"P1,Storage;",
+	"P1S0,VHD,Select disk image...;",
+	"P2,Input;",
+	"P2O78,Joystick 1,Kempston,Sinclair 1,Sinclair 2,Cursor;",
+	"P2O9A,Joystick 2,Kempston,Sinclair 1,Sinclair 2,Cursor;",
+	"P2O3,Swap mouse buttons,OFF,ON;",
+	"P3,Video;",
+	"P3O12,Scandoubler Fx,None,CRT 25%,CRT 50%,CRT 75%;",
+	"P3O4,Vsync,49 Hz,60 Hz;",
+	"P3O5,VDAC1,ON,OFF;",
 	"O6,CPU Type,CMOS,NMOS;",
 	"R256,Save NVRAM settings;",
 	"T0,Reset;",
@@ -101,18 +105,20 @@ pll pll
 	.locked()
 );
 
-altclkctrl
-#(
-	.number_of_clocks(1),
-	.clock_type("External Clock Output"),
-	.ena_register_mode("none"),
-	.intended_device_family("Cyclone III")
-)
-altclkctrl
-(
-	.inclk(clk_ram),
-	.outclk(SDRAM_CLK)
-);
+assign SDRAM_CLK = clk_ram;
+
+//altclkctrl
+//#(
+//	.number_of_clocks(1),
+//	.clock_type("External Clock Output"),
+//	.ena_register_mode("none"),
+//	.intended_device_family("Cyclone III")
+//)
+//altclkctrl
+//(
+//	.inclk(clk_ram),
+//	.outclk(SDRAM_CLK)
+//);
 
 reg ce_28m;
 always @(negedge clk_sys) begin
